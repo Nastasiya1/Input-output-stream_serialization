@@ -1,13 +1,10 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
     static Basket basket;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         String[] products = {
                 "Хлеб",
                 "Яблоки",
@@ -23,9 +20,9 @@ public class Main {
                 80,
                 100};
         int[] amount = new int[products.length];
-        File textFile = new File("basket.txt");
-        if (textFile.exists()) {
-            basket = Basket.loadFromTxtFile(textFile);
+        File file = new File("basket.bin");
+        if (file.exists()) {
+            basket = Basket.loadFromBinFile(file);
         } else {
             basket = new Basket(products, prices);
         }
@@ -47,7 +44,7 @@ public class Main {
             int productNumber = Integer.parseInt(parts[0]) - 1;
             int productCount = Integer.parseInt(parts[1]);
             basket.addToCart(productNumber, productCount);
-            basket.saveTxt(textFile);
+            basket.saveBin(file);
         }
         basket.printCart();
     }

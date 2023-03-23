@@ -1,7 +1,8 @@
 import java.io.*;
 
-public class Basket {
-    private static String[] products;
+public class Basket implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private String[] products;
     private int[] prices;
     private int[] amountOfProducts;
 
@@ -28,39 +29,18 @@ public class Basket {
         System.out.println("Итого " + sum + " руб");
     }
 
-    public void saveTxt(File textFile) throws IOException {
-        try (FileWriter file = new FileWriter(textFile);
-             PrintWriter out = new PrintWriter(file)) {
-            for (String product : products) {
-                out.print(product + " ");
-            }
-            out.println();
-            for (int price : prices) {
-                out.print(price + " ");
-            }
-            out.println();
-            for (int amount : amountOfProducts) {
-                out.print(amount + " ");
-            }
+    public void saveBin(File file) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream("basket.bin");
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(Main.basket);
         }
     }
 
-    public static Basket loadFromTxtFile(File textFile) throws IOException {
-        try (BufferedReader in = new BufferedReader(new FileReader(textFile))) {
-            String[] lineOne = in.readLine().split(" ");
-            String[] lineTwo = in.readLine().split(" ");
-            int[] convertedLineTwo = new int[lineTwo.length];
-            for (int i = 0; i < lineTwo.length; i++) {
-                convertedLineTwo[i] = Integer.parseInt(lineTwo[i]);
-            }
-            String[] lineThree = in.readLine().split(" ");
-            int[] convertedLineThree = new int[lineThree.length];
-            for (int ii = 0; ii < lineThree.length; ii++) {
-                convertedLineThree[ii] = Integer.parseInt(lineThree[ii]);
-            }
-            Basket result = new Basket(lineOne, convertedLineTwo);
-            result.amountOfProducts = convertedLineThree;
-            return result;
+    static Basket loadFromBinFile(File file) throws IOException, ClassNotFoundException {
+        try (FileInputStream fis = new FileInputStream("basket.bin");
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+            return (Basket) ois.readObject();
         }
     }
 }
