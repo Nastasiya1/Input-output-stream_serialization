@@ -12,13 +12,12 @@ public class Basket implements Serializable {
         this.amountOfProducts = new int[products.length];
     }
 
-    int sum;
-
     public void addToCart(int productNum, int amount) {
         amountOfProducts[productNum] += amount;
     }
 
     public void printCart() {
+        int sum = 0;
         System.out.println("Ваша корзина:");
         for (int i = 0; i < amountOfProducts.length; i++) {
             if (amountOfProducts[i] > 0) {
