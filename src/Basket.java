@@ -1,7 +1,7 @@
 import java.io.*;
 
 public class Basket {
-    private static String[] products;
+    private String[] products;
     private int[] prices;
     private int[] amountOfProducts;
 
@@ -11,13 +11,12 @@ public class Basket {
         this.amountOfProducts = new int[products.length];
     }
 
-    int sum;
-
     public void addToCart(int productNum, int amount) {
         amountOfProducts[productNum] += amount;
     }
 
     public void printCart() {
+        int sum = 0;
         System.out.println("Ваша корзина:");
         for (int i = 0; i < amountOfProducts.length; i++) {
             if (amountOfProducts[i] > 0) {
@@ -47,19 +46,19 @@ public class Basket {
 
     public static Basket loadFromTxtFile(File textFile) throws IOException {
         try (BufferedReader in = new BufferedReader(new FileReader(textFile))) {
-            String[] lineOne = in.readLine().split(" ");
-            String[] lineTwo = in.readLine().split(" ");
-            int[] convertedLineTwo = new int[lineTwo.length];
-            for (int i = 0; i < lineTwo.length; i++) {
-                convertedLineTwo[i] = Integer.parseInt(lineTwo[i]);
+            String[] products = in.readLine().split(" ");
+            String[] prices = in.readLine().split(" ");
+            int[] convertedPrices = new int[prices.length];
+            for (int i = 0; i < prices.length; i++) {
+                convertedPrices[i] = Integer.parseInt(prices[i]);
             }
-            String[] lineThree = in.readLine().split(" ");
-            int[] convertedLineThree = new int[lineThree.length];
-            for (int ii = 0; ii < lineThree.length; ii++) {
-                convertedLineThree[ii] = Integer.parseInt(lineThree[ii]);
+            String[] amount = in.readLine().split(" ");
+            int[] convertedAmount = new int[amount.length];
+            for (int ii = 0; ii < amount.length; ii++) {
+                convertedAmount[ii] = Integer.parseInt(amount[ii]);
             }
-            Basket result = new Basket(lineOne, convertedLineTwo);
-            result.amountOfProducts = convertedLineThree;
+            Basket result = new Basket(products, convertedPrices);
+            result.amountOfProducts = convertedAmount;
             return result;
         }
     }
